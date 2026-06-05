@@ -1,0 +1,11 @@
+{
+  "name": "gunyayla-db",
+  "private": true,
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "postgres": "^3.4.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.10"
+  }
+}

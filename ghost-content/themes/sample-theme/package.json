@@ -1,0 +1,12 @@
+{
+  "name": "sample-theme",
+  "description": "Minimal Ghost theme for local testing.",
+  "version": "1.0.0",
+  "author": "gunyayla",
+  "engines": {
+    "ghost": ">=5.0.0"
+  },
+  "config": {
+    "posts_per_page": 5
+  }
+}

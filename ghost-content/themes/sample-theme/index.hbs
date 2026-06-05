@@ -1,0 +1,10 @@
+{{!< default}}
+<section>
+  <h2>Latest posts</h2>
+  {{#foreach posts}}
+    <article>
+      <h3><a href="{{url}}">{{title}}</a></h3>
+      <p>{{excerpt}}</p>
+    </article>
+  {{/foreach}}
+</section>

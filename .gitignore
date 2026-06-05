@@ -1,0 +1,13 @@
+.env
+yedekler/
+nextjs/.next/
+nextjs/node_modules/
+nextjs/drizzle/
+.DS_Store
+Thumbs.db
+github_deploy_key
+github_deploy_key.pub
+github_public_key.txt
+.opencode/
+tools/db/node_modules/
+*.tsbuildinfo

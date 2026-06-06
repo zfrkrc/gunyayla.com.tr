@@ -1,6 +1,6 @@
 const GHOST_URL = process.env.GHOST_URL || "http://ghost:2368"
 const GHOST_KEY = process.env.GHOST_CONTENT_API_KEY
-const GHOST_ADMIN_VERSION = process.env.GHOST_ADMIN_VERSION || "v5.0"
+const GHOST_ADMIN_VERSION = process.env.GHOST_ADMIN_VERSION || "v5.130"
 const MAX_NOTE_LENGTH = 2000
 
 const ghostFetch = (path: string) => {
@@ -21,10 +21,13 @@ function fixHttps(html?: string) {
 
 function fixPost(post: any) {
   if (!post) return post
-  if (post.html) post.html = fixHttps(post.html)
+  if (post.html) {
+    post.html = fixHttps(post.html)
+    // Ghost internal container URL'lerini public URL'e çevir
+    post.html = post.html.replace(/http:\/\/(?:ghost|localhost):\d+\//g, "https://" + DOMAIN + "/")
+  }
   if (post.feature_image) {
-    // Sadece ghost internal URL ise https'e cevirme, host'u public yap
-    post.feature_image = post.feature_image.replace(/^http:\/\/ghost:\d+\//, "https://" + DOMAIN + "/")
+    post.feature_image = post.feature_image.replace(/^http:\/\/(?:ghost|localhost):\d+\//, "https://" + DOMAIN + "/")
   }
   return post
 }
@@ -89,7 +92,7 @@ export async function getPage(slug: string) {
 }
 
 // --- Ghost Admin API JWT token ---
-async function ghostAdminToken() {
+export async function ghostAdminToken() {
   const key = process.env.GHOST_ADMIN_API_KEY
   if (!key) return null
 
@@ -107,7 +110,7 @@ async function ghostAdminToken() {
   return `${header}.${payload}.${sig}`
 }
 
-async function ghostAdminFetch(path: string, options: RequestInit = {}) {
+export async function ghostAdminFetch(path: string, options: RequestInit = {}) {
   const token = await ghostAdminToken()
   if (!token) return null
   const url = process.env.GHOST_URL || "http://ghost:2368"

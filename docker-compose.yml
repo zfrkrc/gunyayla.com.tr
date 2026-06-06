@@ -160,45 +160,75 @@ services:
       minio:
         condition: service_healthy
     environment:
-      # Site
       NEXT_PUBLIC_SITE_URL: "${BETTER_AUTH_URL}"
       SITE_DOMAIN: "${SITE_DOMAIN}"
-      # Ghost API
       GHOST_URL: "http://ghost:2368"
       GHOST_CONTENT_API_KEY: "${GHOST_CONTENT_API_KEY}"
       GHOST_ADMIN_API_KEY: "${GHOST_ADMIN_API_KEY}"
-      # Better Auth
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET}"
       BETTER_AUTH_URL: "${BETTER_AUTH_URL}"
-      # Google OAuth
       GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
       GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET}"
-      # PostgreSQL
       POSTGRES_HOST: "auth_db"
       POSTGRES_PORT: "5432"
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_DB: "${POSTGRES_DB}"
       DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@auth_db:5432/${POSTGRES_DB}"
-      # SMTP
+      NEXT_PUBLIC_GA_ID: "${NEXT_PUBLIC_GA_ID}"
+      MYSQL_HOST: ghost_db
+      MYSQL_PORT: "3306"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DB: "${MYSQL_DATABASE}"
       SMTP_HOST: postaci.zaferkaraca.net
       SMTP_PORT: "587"
       SMTP_USER: admin@gunyayla.com.tr
       SMTP_PASS: "${SMTP_PASS}"
       EMAIL_FROM: "${EMAIL_FROM}"
       SITE_NAME: "${SITE_NAME:-gunyayla.com.tr}"
-      # MinIO / S3
       MINIO_ENDPOINT: "minio:9000"
       MINIO_ACCESS_KEY: "${MINIO_ROOT_USER:-minioadmin}"
       MINIO_SECRET_KEY: "${MINIO_ROOT_PASSWORD:-minioadmin}"
       MINIO_BUCKET: "${MINIO_BUCKET:-gunyayla}"
       MINIO_PUBLIC_URL: "${MINIO_PUBLIC_URL}"
-      # Upload
       UPLOAD_SECRET: "${UPLOAD_SECRET}"
+    volumes:
+      - bot_data:/data
     networks:
       - internal
 
-  # ── 7. Nginx — Tek giriş noktası (port 80) ──────────────────
+  # ── 8. Ollama (AI özet için) ────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - internal
+
+  # ── 9. RSS Bot (2 saatte bir çalışır) ───────────────────────
+  rss-bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    container_name: rss_bot
+    restart: unless-stopped
+    depends_on:
+      - ollama
+      - ghost
+    environment:
+      GHOST_URL: "http://ghost:2368"
+      GHOST_ADMIN_API_KEY: "${GHOST_ADMIN_API_KEY}"
+      OLLAMA_URL: "http://ollama:11434"
+      OLLAMA_MODEL: "gemma3:1b"
+    volumes:
+      - bot_data:/data
+    networks:
+      - internal
+
+  # ── 10. Nginx — Tek giriş noktası (port 80) ─────────────────
   nginx:
     image: nginx:alpine
     container_name: nginx_proxy
@@ -219,6 +249,8 @@ volumes:
   auth_db_data:
   ghost_content:
   minio_data:
+  ollama_data:
+  bot_data:
 
 networks:
   internal:

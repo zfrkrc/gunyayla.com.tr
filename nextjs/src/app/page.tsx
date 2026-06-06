@@ -1,15 +1,19 @@
 import { getPosts, getTags, getSiteSettings } from "@/lib/ghost"
 import { NewsCard } from "@/components/news/NewsCard"
+import { BreakingTicker } from "@/components/BreakingTicker"
+import { WeatherWidget } from "@/components/WeatherWidget"
+import { LoadMore } from "@/components/LoadMore"
 import Link from "next/link"
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const { posts } = await getPosts(1, 10)
+  const { posts, meta } = await getPosts(1, 20)
   const tags = await getTags()
   const settings = await getSiteSettings()
   const siteTitle = settings?.title || "GünYayla"
   const accentColor = settings?.accent_color || "#2563eb"
+  const totalPages = meta?.pagination?.pages || 1
 
   if (posts.length === 0) {
     return (
@@ -23,7 +27,7 @@ export default async function HomePage() {
   const [hero, ...rest] = posts
   const sideNews = rest.slice(0, 3)
   const featured = rest.slice(3, 7)
-  const latest = rest.slice(7)
+  const initialList = rest.slice(7)
 
   const tagColors: Record<string, string> = {
     news: "bg-red-600",
@@ -37,16 +41,30 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
+      {/* ─── SON DAKİKA BANDI ────────────────────────────── */}
+      <BreakingTicker posts={[hero, ...rest]} />
+
       {/* ─── MANŞET + SAĞ PANEL ──────────────────────────── */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {/* Büyük manşet — 2/3 */}
         <div className="lg:col-span-2">
           <NewsCard post={hero} variant="hero" />
         </div>
 
-        {/* Sağ panel — 1/3 */}
         <div className="flex flex-col gap-4">
+          <WeatherWidget latitude={39.3618} longitude={35.6256} city="GünYayla" />
+          <div className="rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6908.561857007404!2d35.62555581775482!3d39.361825186041!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x407f728632d930c7%3A0x9844ed08acecde90!2zR8O8bnlheWxhLCBCYcSfbGFyYmHFn8SxLCA2NjYwMiBHw7xueWF5bGEvw4dhecSxcmFsYW4vWW96Z2F0!5e1!3m2!1str!2str!4v1780694379480!5m2!1str!2str"
+              width="100%"
+              height="180"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="GünYayla Konumu"
+            />
+          </div>
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
             <div className="flex items-center gap-2 mb-4">
               <span className="w-1 h-5 bg-red-600 rounded-full" />
@@ -111,7 +129,6 @@ export default async function HomePage() {
 
       {/* ─── SON HABERLER + SIDEBAR ──────────────────────── */}
       <section className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Sol: haber listesi — 3/4 */}
         <div className="lg:col-span-3">
           <div className="flex items-center gap-3 mb-5">
             <span className="w-1 h-6 bg-gray-800 rounded-full" />
@@ -125,52 +142,13 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="space-y-5">
-            {[hero, ...rest].slice(0, 6).map((post: any, i: number) => (
-              <Link
-                key={post.id}
-                href={`/haberler/${post.slug}`}
-                className="group flex flex-col sm:flex-row gap-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition p-4"
-              >
-                {post.feature_image && (
-                  <div className="relative w-full sm:w-56 h-44 sm:h-28 shrink-0 rounded-lg overflow-hidden">
-                    <img
-                      src={post.feature_image}
-                      alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                    />
-                  </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  {post.tags?.[0] && (
-                    <span
-                      className={`inline-block text-[10px] font-bold text-white px-2 py-0.5 rounded mb-2 uppercase tracking-wider ${
-                        tagColors[post.tags[0].slug] || "bg-gray-700"
-                      }`}
-                    >
-                      {post.tags[0].name}
-                    </span>
-                  )}
-                      <h3 className="text-base font-bold text-gray-800 line-clamp-2 group-hover:text-primary transition leading-snug mb-1">
-                    {post.title}
-                  </h3>
-                  {post.excerpt && (
-                    <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed mb-2">
-                      {post.excerpt}
-                    </p>
-                  )}
-                  <span className="text-xs text-gray-400">
-                    {new Date(post.published_at).toLocaleDateString("tr-TR", {
-                      day: "numeric", month: "long", year: "numeric",
-                    })} · {post.reading_time ?? 1} dk okuma
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {initialList.length > 0 ? (
+            <LoadMore initialPosts={initialList} pageSize={6} />
+          ) : (
+            <p className="text-gray-400 text-center py-8">Daha fazla haber bulunmuyor.</p>
+          )}
         </div>
 
-        {/* Sağ: sidebar — 1/4 */}
         <div className="space-y-6">
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
             <div className="flex items-center gap-2 mb-4">
@@ -190,7 +168,7 @@ export default async function HomePage() {
                   <div className="min-w-0">
                     <h4 className="text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-primary transition leading-snug">
                       {post.title}
-                </h4>
+                    </h4>
                     <span className="text-[10px] text-gray-400">
                       {new Date(post.published_at).toLocaleDateString("tr-TR", {
                         day: "numeric", month: "short",

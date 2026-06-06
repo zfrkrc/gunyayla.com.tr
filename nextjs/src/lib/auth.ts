@@ -1,6 +1,8 @@
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { eq } from "drizzle-orm"
+import { headers } from "next/headers"
+import { NextResponse } from "next/server"
 import { db, user } from "./db"
 import { sendVerificationEmail, sendResetPasswordEmail } from "./email"
 import { syncGhostMember } from "./ghost"
@@ -103,3 +105,10 @@ export const auth = betterAuth({
 })
 
 export type Session = typeof auth.$Infer.Session
+
+export async function checkAdmin() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) return NextResponse.json({ error: "Yetkisiz" }, { status: 401 })
+  if (session.user.role !== "admin") return NextResponse.json({ error: "Yasak" }, { status: 403 })
+  return null
+}

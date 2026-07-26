@@ -1,8 +1,20 @@
 import Parser from "rss-parser"
 import { createHmac } from "crypto"
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs"
-import { join, dirname } from "path"
+import { dirname } from "path"
 import { fileURLToPath } from "url"
+
+function decodeEntities(text) {
+  return text
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, "\"")
+    .replace(/&#x27;/g, "'")
+    .replace(/&#x2F;/g, "/")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCharCode(parseInt(h, 16)))
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -12,12 +24,14 @@ const OLLAMA_URL = process.env.OLLAMA_URL || "http://ollama:11434"
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "gemma3:1b"
 const STATE_FILE = process.env.STATE_FILE || "/data/processed-guids.json"
 const SOURCES_FILE = "/data/sources.json"
+const NEWSLETTER_ID = process.env.NEWSLETTER_ID || ""
 
 const parser = new Parser({
   customFields: {
     item: [
       ["media:content", "mediaContent", { keepArray: false }],
       ["media:thumbnail", "mediaThumbnail", { keepArray: false }],
+      ["image", "image", { keepArray: false }],
     ],
   },
 })
@@ -27,7 +41,6 @@ if (!GHOST_ADMIN_KEY) {
   process.exit(1)
 }
 
-// ── Kaynakları oku ──────────────────────────────────────────
 function loadSources() {
   try {
     if (existsSync(SOURCES_FILE)) {
@@ -37,7 +50,6 @@ function loadSources() {
   } catch (e) {
     console.error("  sources.json okuma hatası:", e.message)
   }
-  // Varsayılan kaynaklar
   const defaults = [
     { name: "Yozgat Çamlık",     url: "https://www.yozgatcamlik.com/rss/" },
     { name: "Yozgat Hakimiyet",  url: "https://www.yozgathakimiyet.com.tr/feed/" },
@@ -45,7 +57,6 @@ function loadSources() {
     { name: "İleri Gazetesi",    url: "https://www.ilerigazetesi.com.tr/rss/" },
     { name: "Merhaba Yozgat",    url: "https://merhabayozgat.com/rss/" },
   ]
-  // Varsayılanları kaydet
   try {
     const dir = dirname(SOURCES_FILE)
     if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
@@ -54,8 +65,8 @@ function loadSources() {
   return defaults
 }
 
-// ── RSS'den resim çıkar ─────────────────────────────────────
 function extractImage(item) {
+  if (item.image) return item.image
   if (item.enclosure?.url && item.enclosure.type?.startsWith("image")) {
     return item.enclosure.url
   }
@@ -67,7 +78,6 @@ function extractImage(item) {
   return null
 }
 
-// ── Ghost Admin JWT ─────────────────────────────────────────
 function ghostToken(key) {
   const [id, secret] = key.split(":")
   const iat = Math.floor(Date.now() / 1000)
@@ -95,7 +105,6 @@ async function ghostFetch(path, options = {}) {
   return res
 }
 
-// ── State (işlenmiş GUID'ler) ──────────────────────────────
 function loadState() {
   try {
     if (existsSync(STATE_FILE)) {
@@ -111,44 +120,66 @@ function saveState(state) {
   writeFileSync(STATE_FILE, JSON.stringify(state, null, 2))
 }
 
-// ── RSS içeriğinden ilk 1-2 paragraf çıkar ──────────────────
-function extractFirstParagraphs(item) {
+function extractContent(item) {
   const raw = item["content:encoded"] || item.content || item.contentSnippet || ""
   if (!raw) return null
 
-  // HTML içinden <p>...</p> etiketlerini bul
   const pTags = raw.match(/<p[^>]*>([\s\S]*?)<\/p>/gi)
   let text = ""
   if (pTags && pTags.length > 0) {
-    const count = Math.min(pTags.length, 2)
+    const count = Math.min(pTags.length, 5)
     for (let i = 0; i < count; i++) {
       text += pTags[i].replace(/<[^>]+>/g, "").trim() + "\n\n"
     }
   } else {
-    // <p> yoksa düz metin al, kısalt
     text = raw.replace(/<[^>]+>/g, "").trim()
   }
 
   text = text.trim()
-  // 400 karakter sınırı
-  if (text.length > 400) {
-    text = text.slice(0, 400).replace(/\s+\S*$/, "") + "..."
+  if (!text) return null
+
+  if (text.length > 2000) {
+    text = text.slice(0, 2000).replace(/\s+\S*$/, "") + "..."
   }
-  return text || null
+  return text
 }
 
-// ── Ollama yeniden yaz ──────────────────────────────────────
-async function rewriteArticle(title, content) {
-  const prompt = `Aşağıdaki haberi farklı bir bakış açısıyla, farklı kelimeler kullanarak yeniden yaz. Cevabında önce yeni başlığı yaz, sonra iki satır boşluk bırak, sonra haber metnini yaz. Başlık max 10 kelime olsun. Türkçe yaz. Haber aynı olsun ama anlatım tarzı tamamen farklı olsun.
+function buildMobiledoc(content, imageUrl, sourceUrl, sourceName) {
+  const cards = []
+  const markups = []
+  const sections = []
 
-Orijinal Başlık: ${title}
-Orijinal İçerik: ${content || "İçerik bulunamadı"}
+  if (imageUrl) {
+    cards.push(["image", { src: imageUrl }])
+    sections.push([10, cards.length - 1])
+  }
 
-Yeni Başlık:
-[buraya yeni başlık]
+  if (content) {
+    const clean = content.replace(/<[^>]+>/g, "").trim()
+    if (clean) {
+      sections.push([1, "p", [[0, [], 0, clean]]])
+    }
+  }
 
-Yeni İçerik:
-[buraya yeni içerik]`
+  if (sourceUrl && sourceName) {
+    markups.push(["a", ["href", sourceUrl, "target", "_blank", "rel", "noopener noreferrer"]])
+    sections.push([1, "p", [
+      [0, [], 0, "📰 Kaynak: "],
+      [0, [0], sourceName.length, sourceName],
+    ]])
+  }
+
+  return JSON.stringify({
+    version: "0.3.1",
+    atoms: [],
+    cards,
+    markups,
+    sections,
+  })
+}
+
+async function summarizeArticle(title, content) {
+  const prompt = `Şu haberi 3-4 cümleyle özetle:\n\nBaşlık: ${title}\n\n${content || ""}\n\nÖzet:`
 
   const res = await fetch(`${OLLAMA_URL}/api/generate`, {
     method: "POST",
@@ -156,28 +187,27 @@ Yeni İçerik:
       model: OLLAMA_MODEL,
       prompt,
       stream: false,
-      options: { num_predict: 400, temperature: 0.7 },
+      options: { num_predict: 200, temperature: 0.3 },
     }),
   })
 
   if (!res.ok) {
-    console.error(`  Ollama rewrite hatası: ${res.status}`)
+    console.error(`  Ollama hatası: ${res.status}`)
     return null
   }
   const data = await res.json()
   const text = data.response?.trim()
-  if (!text) return null
-
-  // Yanıttan başlık ve içerik ayır
-  const parts = text.split(/\n\n+/)
-  const newTitle = parts[0]?.replace(/^["*]|["*]$/g, "").trim() || title
-  const newContent = parts.slice(1).join("\n\n").trim()
-  if (!newContent) return null
-
-  return { title: newTitle, content: newContent }
+  if (!text || text.length < 20 || /tamamdır|elbette|tabii/i.test(text)) return null
+  return text
 }
 
-// ── Ghost'ta slug'a göre post bul ───────────────────────────
+async function fetchPost(postId) {
+  const res = await ghostFetch(`/posts/${postId}/?fields=id,title,updated_at`)
+  if (!res || !res.ok) return null
+  const data = await res.json()
+  return data.posts?.[0] || null
+}
+
 async function findPostBySlug(slug) {
   const res = await ghostFetch(`/posts/slug/${slug}/`)
   if (!res || !res.ok) return null
@@ -185,29 +215,22 @@ async function findPostBySlug(slug) {
   return data.posts?.[0] || null
 }
 
-// ── Ghost draft oluştur ─────────────────────────────────────
-async function createDraft(title, excerpt, sourceName, sourceUrl, imageUrl) {
-  const srcLink = `<p style="margin-top:12px"><a href="${sourceUrl}" target="_blank" rel="noopener noreferrer" style="color:#2563eb;font-weight:600">📰 Kaynağa git →</a></p>`
-  const content = excerpt || `<p><em>Bu haber ${sourceName} kaynağından alınmıştır.</em></p>`
-  const html = [
-    content,
-    srcLink,
-    `<hr><p style="color:#888;font-size:0.9em">Kaynak: <a href="${sourceUrl}">${sourceName}</a></p>`,
-  ].filter(Boolean).join("\n")
+async function createPost(title, content, imageUrl, sourceName, sourceUrl) {
+  const mobiledoc = buildMobiledoc(content, imageUrl, sourceUrl, sourceName)
 
   const body = {
     posts: [{
       title,
-      html: html || `<p>${title}</p>`,
-      excerpt: excerpt || title,
-      status: "draft",
+      mobiledoc,
+      status: "published",
       visibility: "public",
       tags: [{ name: "otomatik", slug: "otomatik" }],
+      feature_image: imageUrl || undefined,
+      ...(NEWSLETTER_ID ? {
+        newsletter_id: NEWSLETTER_ID,
+        email_recipient_filter: "all",
+      } : {}),
     }],
-  }
-
-  if (imageUrl) {
-    body.posts[0].feature_image = imageUrl
   }
 
   const res = await ghostFetch("/posts/", {
@@ -218,20 +241,20 @@ async function createDraft(title, excerpt, sourceName, sourceUrl, imageUrl) {
   if (!res || !res.ok) {
     const text = res ? await res.text() : "no response"
     console.error(`  Ghost post oluşturma hatası: ${res?.status} ${text}`)
-    return false
+    return null
   }
-  return true
+  const data = await res.json()
+  return data.posts?.[0]?.id || null
 }
 
-// ── Ghost post güncelle (yeniden yaz) ───────────────────────
-async function updatePost(postId, newTitle, newContent, sourceName, sourceUrl) {
-  const srcLink = `<p style="margin-top:12px"><a href="${sourceUrl}" target="_blank" rel="noopener noreferrer" style="color:#2563eb;font-weight:600">📰 Kaynağa git →</a></p>`
-  const content = newContent || `<p><em>Bu haber ${sourceName} kaynağından alınmıştır.</em></p>`
-  const html = [
-    content,
-    srcLink,
-    `<hr><p style="color:#888;font-size:0.9em">Kaynak: <a href="${sourceUrl}">${sourceName}</a></p>`,
-  ].filter(Boolean).join("\n")
+async function updatePost(postId, newTitle, newContent, newImageUrl, sourceName, sourceUrl) {
+  const current = await fetchPost(postId)
+  if (!current) {
+    console.error("  Post bulunamadı, güncelleme iptal")
+    return false
+  }
+
+  const mobiledoc = buildMobiledoc(newContent, newImageUrl, sourceUrl, sourceName)
 
   const res = await ghostFetch(`/posts/${postId}/`, {
     method: "PUT",
@@ -239,15 +262,19 @@ async function updatePost(postId, newTitle, newContent, sourceName, sourceUrl) {
       posts: [{
         id: postId,
         title: newTitle,
-        html: html || newTitle,
-        updated_at: new Date().toISOString(),
+        mobiledoc,
+        updated_at: current.updated_at,
       }],
     }),
   })
 
   if (!res || !res.ok) {
     const text = res ? await res.text() : "no response"
-    console.error(`  Ghost post güncelleme hatası: ${res?.status} ${text}`)
+    if (res?.status === 409) {
+      console.error("  Çakışma, sonraki turda tekrar denenir")
+    } else {
+      console.error(`  Ghost post güncelleme hatası: ${res?.status} ${text}`)
+    }
     return false
   }
   return true
@@ -262,7 +289,10 @@ function makeSlug(title) {
     .slice(0, 50)
 }
 
-// ── Ana döngü ───────────────────────────────────────────────
+function isBadSummary(text) {
+  return !text || text.length < 20 || /tamamdır|elbette|tabii|isteğiniz|buraya/i.test(text)
+}
+
 async function run() {
   console.log(`\n[${new Date().toISOString()}] Bot başladı`)
   const state = loadState()
@@ -284,32 +314,56 @@ async function run() {
     console.log(`  ${items.length} haber bulundu`)
 
     for (const item of items) {
+      item.title = decodeEntities(item.title || "")
+      if (item["content:encoded"]) item["content:encoded"] = decodeEntities(item["content:encoded"])
+      if (item.content) item.content = decodeEntities(item.content)
+
       const guid = item.guid || item.link || item.title
       if (!guid) continue
 
-      if (state.processed[guid]) {
+      if (state.processed[guid] === "rewritten") continue
+
+      const prevState = state.processed[guid]
+      let postId = state.postIds?.[guid]
+
+      if (prevState === "created" && postId) {
+        console.log(`  🔄 ${item.title?.slice(0, 60)}... (özet yenileniyor)`)
+
+        const content = extractContent(item)
+        let summary
+        try {
+          summary = await summarizeArticle(item.title, content)
+        } catch (e) {
+          console.log(`    Özet hatası: ${e.message?.slice(0, 60)}, atlanıyor`)
+          continue
+        }
+        if (isBadSummary(summary)) {
+          console.log("    Özet başarısız, kaynak link korunuyor")
+          state.processed[guid] = "rewritten"
+          continue
+        }
+        console.log(`    📝 Özet: ${summary.slice(0, 80)}...`)
+
+        const imageUrl = extractImage(item)
+        const ok = await updatePost(postId, item.title, summary, imageUrl, source.name, item.link)
+        if (ok) {
+          state.processed[guid] = "rewritten"
+          rewriteCount++
+          console.log("    ✅ Post güncellendi")
+        }
         continue
       }
 
-      const slug = makeSlug(item.title)
-      const existing = await findPostBySlug(slug)
-
-      if (existing) {
-        console.log(`  🔄 ${item.title?.slice(0, 60)}... (zaten var, yeniden yazılıyor)`)
-        const rewritten = await rewriteArticle(item.title, item.contentSnippet || item.content || item.title)
-        if (!rewritten) {
-          console.log("    Yeniden yazma başarısız, atlanıyor")
-          state.processed[guid] = true
+      if (!prevState) {
+        const slug = makeSlug(item.title)
+        const existing = await findPostBySlug(slug)
+        if (existing) {
+          console.log(`  ⏭ ${item.title?.slice(0, 60)}... (zaten var, ID kaydediliyor)`)
+          state.processed[guid] = "created"
+          if (!state.postIds) state.postIds = {}
+          state.postIds[guid] = existing.id
           continue
         }
-        console.log(`    📝 Yeni başlık: ${rewritten.title.slice(0, 60)}...`)
-        const ok = await updatePost(existing.id, rewritten.title, rewritten.content, source.name, item.link)
-        if (ok) {
-          state.processed[guid] = true
-          rewriteCount++
-          console.log("    ✅ Post güncellendi (yeniden yazıldı)")
-        }
-        continue
       }
 
       console.log(`  ➜ ${item.title?.slice(0, 60)}...`)
@@ -317,24 +371,29 @@ async function run() {
       const imageUrl = extractImage(item)
       if (imageUrl) console.log(`    🖼️ Resim: ${imageUrl.slice(0, 60)}...`)
 
-      const excerpt = extractFirstParagraphs(item)
-      if (!excerpt) {
+      const content = extractContent(item)
+      if (!content) {
         console.log("    İçerik alınamadı, atlanıyor")
         continue
       }
-      console.log(`    📝 İçerik: ${excerpt.slice(0, 80)}...`)
+      console.log(`    📝 İçerik: ${content.slice(0, 80)}...`)
 
-      const ok = await createDraft(item.title, excerpt, source.name, item.link, imageUrl)
-      if (ok) {
-        state.processed[guid] = true
+      const newPostId = await createPost(item.title, content, imageUrl, source.name, item.link)
+      if (newPostId) {
+        state.processed[guid] = "created"
+        if (!state.postIds) state.postIds = {}
+        state.postIds[guid] = newPostId
         newCount++
-        console.log("    ✅ Draft oluşturuldu")
+        console.log("    ✅ Yayınlandı")
       }
     }
   }
 
   saveState(state)
-  console.log(`\n✅ İşlem tamam. ${newCount} yeni draft, ${rewriteCount} güncelleme.`)
+  console.log(`\n✅ İşlem tamam. ${newCount} yeni post yayınlandı, ${rewriteCount} güncelleme.`)
 }
 
-run().catch((e) => console.error("❌ Hata:", e))
+run().then(() => process.exit(0)).catch((e) => {
+  console.error("❌ Hata:", e)
+  process.exit(1)
+})

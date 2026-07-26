@@ -30,6 +30,14 @@ guncelle:
 log:
 	docker compose logs -f
 
+## WhatsApp bot QR kodunu göster
+whatsapp-qr:
+	docker compose logs whatsapp-bot 2>&1 | grep -o "QR.*" || echo "QR kodu için: make whatsapp-log"
+
+## WhatsApp bot canlı log
+whatsapp-log:
+	docker compose logs -f whatsapp-bot
+
 ## Container durumu
 durum:
 	docker compose ps

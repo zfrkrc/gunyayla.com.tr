@@ -16,9 +16,11 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
   try {
     nodemailer = await import("nodemailer")
   } catch {
-    console.warn("nodemailer yüklü değil, email gönderilemedi")
+    console.warn("[EMAIL] nodemailer yüklü değil, email gönderilemedi")
     return
   }
+
+  console.log(`[EMAIL] Gönderiliyor: to=${to} subject=${subject}`)
 
   const transporter = nodemailer.createTransport({
     host: SMTP_HOST,
@@ -30,12 +32,19 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
     },
   })
 
-  await transporter.sendMail({
-    from: EMAIL_FROM,
-    to,
-    subject,
-    html,
-  })
+  try {
+    const info = await transporter.sendMail({
+      from: EMAIL_FROM,
+      to,
+      subject,
+      html,
+    })
+    console.log(`[EMAIL] Gönderildi: ${info.messageId}`)
+  } catch (e: any) {
+    console.error(`[EMAIL] HATA: ${e.message}`)
+    if (e.response) console.error(`[EMAIL] SMTP Yanıt: ${e.response}`)
+    throw e
+  }
 }
 
 export function sendVerificationEmail(email: string, url: string) {

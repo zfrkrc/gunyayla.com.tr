@@ -46,6 +46,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link href="/admin/rss-sources" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
               📡 RSS Kaynakları
             </Link>
+            <Link href="/admin/reklam" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+              📢 Reklam
+            </Link>
             <a href="/ghost" target="_blank" className="block px-4 py-2 rounded-lg text-sm font-medium text-blue-600 hover:bg-blue-50 transition">
               ✏️ Ghost Admin →
             </a>

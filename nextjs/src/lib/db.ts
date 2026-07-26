@@ -77,10 +77,82 @@ export const photos = pgTable("photos", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
 
+// ── Reklam Alanları ──────────────────────────────────────────
+export const ads = pgTable("ads", {
+  id:               text("id").primaryKey(),
+  title:            text("title").notNull(),
+  category:         text("category").notNull(),
+  description:      text("description"),
+  price:            text("price"),
+  dimensions:       text("dimensions"),
+  mobileDimensions: text("mobile_dimensions"),
+  channelTag:       text("channel_tag"),
+  platform:         text("platform").default("all"),
+  imageUrl:         text("image_url"),
+  sortOrder:        integer("sort_order").default(0),
+  status:           text("status").default("active"),
+  createdAt:        timestamp("created_at").defaultNow().notNull(),
+  updatedAt:        timestamp("updated_at").defaultNow().notNull(),
+})
+
+// ── Reklam Kampanyaları ──────────────────────────────────────
+export const adCampaigns = pgTable("ad_campaigns", {
+  id:             text("id").primaryKey(),
+  adId:           text("ad_id").notNull().references(() => ads.id, { onDelete: "cascade" }),
+  clientName:     text("client_name"),
+  clientContact:  text("client_contact"),
+  startDate:      timestamp("start_date"),
+  durationMonths: integer("duration_months"),
+  priceAgreed:    text("price_agreed"),
+  bannerUrl:      text("banner_url"),
+  bannerMobileUrl: text("banner_mobile_url"),
+  linkUrl:        text("link_url"),
+  notes:          text("notes"),
+  status:         text("status").default("active"),
+  createdAt:      timestamp("created_at").defaultNow().notNull(),
+  updatedAt:      timestamp("updated_at").defaultNow().notNull(),
+})
+
 export type Album = typeof albums.$inferSelect
 export type Photo = typeof photos.$inferSelect
 export type NewAlbum = typeof albums.$inferInsert
 export type NewPhoto = typeof photos.$inferInsert
+export type Ad = typeof ads.$inferSelect
+export type NewAd = typeof ads.$inferInsert
+export type AdCampaign = typeof adCampaigns.$inferSelect
+export type NewAdCampaign = typeof adCampaigns.$inferInsert
+
+// ── Yorumlar ──────────────────────────────────────────────
+export const comments = pgTable("comments", {
+  id:        text("id").primaryKey(),
+  postId:    text("post_id").notNull(),
+  name:      text("name").notNull(),
+  email:     text("email"),
+  content:   text("content").notNull(),
+  parentId:  text("parent_id"),
+  status:    text("status").default("approved"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("comments_postId_idx").on(table.postId),
+  index("comments_parentId_idx").on(table.parentId),
+])
+
+// ── Geri Bildirim (beğeni/beğenmeme) ──────────────────────
+export const postFeedback = pgTable("post_feedback", {
+  id:        text("id").primaryKey(),
+  postId:    text("post_id").notNull(),
+  email:     text("email"),
+  score:     integer("score").notNull(), // 1 = like, 0 = dislike
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("feedback_postId_idx").on(table.postId),
+])
+
+export type Comment = typeof comments.$inferSelect
+export type NewComment = typeof comments.$inferInsert
+export type PostFeedback = typeof postFeedback.$inferSelect
+export type NewPostFeedback = typeof postFeedback.$inferInsert
 
 const buildDatabaseUrl = () => {
   const host = process.env.POSTGRES_HOST
@@ -98,5 +170,5 @@ const buildDatabaseUrl = () => {
 
 const client = postgres(buildDatabaseUrl())
 export const db = drizzle(client, {
-  schema: { user, session, account, verification, albums, photos },
+  schema: { user, session, account, verification, albums, photos, ads, adCampaigns, comments, postFeedback },
 })

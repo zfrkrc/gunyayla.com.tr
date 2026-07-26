@@ -56,11 +56,21 @@ export async function getPost(slug: string) {
 // --- Kategoriye gore haberler ---
 export async function getPostsByTag(tag: string, limit = 12) {
   const res = await ghostFetch(
-    `/posts/?filter=tag:${tag}&limit=${limit}&include=tags,authors&fields=id,title,slug,excerpt,feature_image,published_at`
+    `/posts/?filter=tag:${tag}&limit=${limit}&include=tags,authors&fields=id,title,slug,excerpt,feature_image,published_at,reading_time`
   )
   if (!res.ok) return []
   const data = await res.json()
   return (data.posts ?? []).map(fixPost)
+}
+
+// --- Kategoriye gore haberler (sayfali) ---
+export async function getPostsByTagPaginated(tag: string, page = 1, limit = 12) {
+  const res = await ghostFetch(
+    `/posts/?filter=tag:${tag}&page=${page}&limit=${limit}&include=tags,authors&fields=id,title,slug,excerpt,feature_image,published_at,reading_time`
+  )
+  if (!res.ok) return { posts: [], meta: null }
+  const data = await res.json()
+  return { posts: (data.posts ?? []).map(fixPost), meta: data.meta }
 }
 
 // --- Tum etiketler ---

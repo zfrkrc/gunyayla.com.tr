@@ -17,9 +17,11 @@ type Post = {
 export function LoadMore({
   initialPosts,
   pageSize = 6,
+  tag,
 }: {
   initialPosts: Post[]
   pageSize?: number
+  tag?: string
 }) {
   const [posts, setPosts] = useState<Post[]>(initialPosts)
   const [page, setPage] = useState(2)
@@ -30,7 +32,9 @@ export function LoadMore({
     if (loading) return
     setLoading(true)
     try {
-      const res = await fetch(`/api/posts?page=${page}&limit=${pageSize}`)
+      const params = new URLSearchParams({ page: String(page), limit: String(pageSize) })
+      if (tag) params.set("tag", tag)
+      const res = await fetch(`/api/posts?${params}`)
       const data = await res.json()
       if (data.posts?.length) {
         setPosts((prev) => [...prev, ...data.posts])

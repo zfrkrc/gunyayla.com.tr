@@ -3,6 +3,7 @@ import { NewsCard } from "@/components/news/NewsCard"
 import { BreakingTicker } from "@/components/BreakingTicker"
 import { WeatherWidget } from "@/components/WeatherWidget"
 import { LoadMore } from "@/components/LoadMore"
+import { AdDisplay } from "@/components/AdDisplay"
 import Link from "next/link"
 
 export const dynamic = 'force-dynamic'
@@ -95,6 +96,9 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── REKLAM (Anasayfa - Manset Alti) ──────────────── */}
+      <AdDisplay category="anasayfa" className="flex justify-center" />
+
       {/* ─── KATEGORİ ETİKETLERİ ─────────────────────────── */}
       {tags.length > 0 && (
         <section className="flex flex-wrap gap-2">
@@ -112,6 +116,9 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* ─── REKLAM (Şehir Markası) ──────────────────────── */}
+      <AdDisplay category="sehir" className="flex justify-center" />
+
       {/* ─── ÖNE ÇIKANLAR ────────────────────────────────── */}
       {featured.length > 0 && (
         <section>
@@ -126,6 +133,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ─── REKLAM (Icerik Arasi) ────────────────────────── */}
+      <AdDisplay category="alan" className="flex justify-center" />
 
       {/* ─── SON HABERLER + SIDEBAR ──────────────────────── */}
       <section className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -150,6 +160,7 @@ export default async function HomePage() {
         </div>
 
         <div className="space-y-6">
+          <AdDisplay category="yan" />
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
             <div className="flex items-center gap-2 mb-4">
               <span className="w-1 h-5 bg-orange-500 rounded-full" />
@@ -191,6 +202,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ─── REKLAM (Diğer) ──────────────────────────────── */}
+      <AdDisplay category="diger" className="flex justify-center" />
     </div>
   )
 }

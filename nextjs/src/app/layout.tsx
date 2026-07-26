@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import "./globals.css"
 import { Navbar } from "@/components/ui/Navbar"
+import { SubscribeButton } from "@/components/SubscribeButton"
 import { getSiteSettings } from "@/lib/ghost"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -60,8 +61,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   )) : (
                     <>
                       <li><Link href="/" className="text-xs text-gray-500 hover:text-primary transition">Haberler</Link></li>
+                      <li><Link href="/koy" className="text-xs text-gray-500 hover:text-primary transition">Köy</Link></li>
                       <li><Link href="/galeri" className="text-xs text-gray-500 hover:text-primary transition">Galeri</Link></li>
                       <li><Link href="/haberler" className="text-xs text-gray-500 hover:text-primary transition">Tüm Haberler</Link></li>
+                      <li><Link href="/reklam" className="text-xs text-gray-500 hover:text-primary transition">Reklam</Link></li>
                     </>
                   )}
                 </ul>
@@ -75,10 +78,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 </ul>
               </div>
               <div>
-                <h3 className="text-sm font-bold text-gray-800 mb-3">İletişim</h3>
-                <ul className="space-y-1.5">
-                  <li><span className="text-xs text-gray-500">info@gunyayla.com.tr</span></li>
-                </ul>
+                <h3 className="text-sm font-bold text-gray-800 mb-3">Bülten</h3>
+                <p className="text-xs text-gray-500 mb-3">Haber bültenine abone ol, güncellemeleri kaçırma.</p>
+                <SubscribeButton />
               </div>
             </div>
             <div className="border-t border-gray-100 pt-6 text-center text-xs text-gray-400">

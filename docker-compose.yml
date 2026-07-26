@@ -223,12 +223,35 @@ services:
       GHOST_ADMIN_API_KEY: "${GHOST_ADMIN_API_KEY}"
       OLLAMA_URL: "http://ollama:11434"
       OLLAMA_MODEL: "gemma3:1b"
+      SITE_URL: "https://gunyayla.com.tr"
+      WHATSAPP_NOTIFY_URL: "http://whatsapp-bot:3000/notify"
     volumes:
       - bot_data:/data
     networks:
       - internal
 
-  # ── 10. Nginx — Tek giriş noktası (port 80) ─────────────────
+  # ── 10. WhatsApp Bot (BuilderBot + Baileys) ─────────────────
+  whatsapp-bot:
+    build:
+      context: ./bot-whatsapp
+      dockerfile: Dockerfile
+    container_name: whatsapp_bot
+    restart: unless-stopped
+    depends_on:
+      - ghost
+    ports:
+      - "0.0.0.0:3000:3000"
+    environment:
+      GHOST_URL: "http://ghost:2368"
+      GHOST_CONTENT_API_KEY: "${GHOST_CONTENT_API_KEY}"
+      ADMIN_NUMBERS: "${WHATSAPP_ADMIN_NUMBERS}"
+      PORT: "3000"
+    volumes:
+      - whatsapp_data:/app/sessions
+    networks:
+      - internal
+
+  # ── 11. Nginx — Tek giriş noktası (port 80) ─────────────────
   nginx:
     image: nginx:alpine
     container_name: nginx_proxy
@@ -251,6 +274,7 @@ volumes:
   minio_data:
   ollama_data:
   bot_data:
+  whatsapp_data:
 
 networks:
   internal:

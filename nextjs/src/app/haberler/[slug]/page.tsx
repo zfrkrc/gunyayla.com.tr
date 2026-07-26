@@ -1,6 +1,7 @@
 import { getPost, getSiteSettings } from "@/lib/ghost"
 import Image from "next/image"
 import Link from "next/link"
+import { AdDisplay } from "@/components/AdDisplay"
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 60
@@ -92,11 +93,13 @@ export default async function PostPage({ params }: Props) {
         )}
       </div>
 
-      {/* İçerik */}
+      {/* ─── İçerik ──────────────────────────────────────── */}
+      <AdDisplay category="altsayfa" className="mb-6 flex justify-center" />
       <div
         className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-a:text-primary prose-img:rounded-xl prose-img:shadow-md"
         dangerouslySetInnerHTML={{ __html: post.html || "<p>İçerik bulunamadı.</p>" }}
       />
+      <AdDisplay category="paragraf" className="mt-6 flex justify-center" />
 
       {/* Alt bilgi */}
       <div

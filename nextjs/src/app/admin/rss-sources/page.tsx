@@ -13,6 +13,20 @@ export default function RssSourcesPage() {
   const [editName, setEditName] = useState("")
   const [editUrl, setEditUrl] = useState("")
   const [msg, setMsg] = useState("")
+  const [restarting, setRestarting] = useState(false)
+
+  async function restartBot() {
+    setRestarting(true)
+    setMsg("")
+    try {
+      const res = await fetch("/api/admin/rss-bot/restart", { method: "POST" })
+      if (res.ok) setMsg("✅ Bot yeniden başlatılıyor...")
+      else setMsg("❌ Hata oluştu")
+    } catch {
+      setMsg("❌ Bağlantı hatası")
+    }
+    setRestarting(false)
+  }
 
   async function load() {
     setLoading(true)
@@ -119,6 +133,13 @@ export default function RssSourcesPage() {
             Ekle
           </button>
         </form>
+      </div>
+
+      <div className="flex gap-3 mb-6">
+        <button onClick={restartBot} disabled={restarting}
+          className="bg-green-600 text-white rounded-lg px-6 py-2 text-sm font-medium hover:bg-green-700 transition disabled:opacity-50">
+          {restarting ? "Yeniden başlatılıyor..." : "🔄 Botu Yeniden Başlat"}
+        </button>
       </div>
 
       <div className="bg-white border border-gray-100 rounded-xl overflow-hidden">

@@ -81,6 +81,19 @@ export async function getTags() {
   return data.tags ?? []
 }
 
+// --- Arama (baslikta gecen kelime) ---
+export async function searchPosts(query: string, limit = 20) {
+  const q = query.trim()
+  if (!q) return []
+  const filter = `title:~'${q.replace(/'/g, "")}'`
+  const res = await ghostFetch(
+    `/posts/?filter=${encodeURIComponent(filter)}&limit=${limit}&include=tags,authors&fields=id,title,slug,excerpt,feature_image,published_at,reading_time`
+  )
+  if (!res.ok) return []
+  const data = await res.json()
+  return (data.posts ?? []).map(fixPost)
+}
+
 // --- Site ayarlari (baslik, logo, aciklama) ---
 export async function getSiteSettings() {
   try {

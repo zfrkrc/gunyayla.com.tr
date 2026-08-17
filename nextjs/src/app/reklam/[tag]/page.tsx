@@ -22,7 +22,7 @@ const categoryColors: Record<string, string> = {
   paragraf: "bg-orange-100 text-orange-700",
   yan: "bg-pink-100 text-pink-700",
   sehir: "bg-amber-100 text-amber-700",
-  diger: "bg-gray-100 text-gray-700",
+  diger: "bg-[#0f0f16] text-gray-300",
 }
 
 function pagePreviewSvg(ad: any): string {
@@ -109,7 +109,7 @@ async function renderDetail(ad: any, tag: string) {
 
   const activeCampaign = campaigns.find(c => c.status === "active")
   const catLabel = categoryLabels[ad.category] || ad.category
-  const catColor = categoryColors[ad.category] || "bg-gray-100 text-gray-700"
+  const catColor = categoryColors[ad.category] || "bg-[#0f0f16] text-gray-300"
   const svg = pagePreviewSvg(ad)
 
   return (
@@ -120,15 +120,15 @@ async function renderDetail(ad: any, tag: string) {
         <span>/</span>
         <Link href="/reklam" className="hover:text-blue-600 transition">Reklam</Link>
         <span>/</span>
-        <span className="text-gray-600">{ad.title}</span>
+        <span className="text-gray-400">{ad.title}</span>
       </div>
 
       <div className="grid md:grid-cols-5 gap-8">
         {/* Sol: Görsel yerleşim */}
         <div className="md:col-span-3">
-          <div className="bg-white border border-gray-100 rounded-2xl p-6">
-            <h2 className="text-sm font-semibold text-gray-500 mb-4">YERLEŞİM PLANI</h2>
-            <div className="bg-gray-50 rounded-xl p-4" dangerouslySetInnerHTML={{ __html: svg }} />
+          <div className="bg-[#0f0f16] border border-white/5 rounded-2xl p-6">
+            <h2 className="text-sm font-semibold text-gray-400 mb-4">YERLEŞİM PLANI</h2>
+            <div className="bg-[#050508] rounded-xl p-4" dangerouslySetInnerHTML={{ __html: svg }} />
             <p className="text-xs text-gray-400 mt-3 text-center">
               Mavi ile işaretli alan reklamın sayfadaki konumunu göstermektedir.
             </p>
@@ -137,39 +137,39 @@ async function renderDetail(ad: any, tag: string) {
 
         {/* Sağ: Detaylar */}
         <div className="md:col-span-2">
-          <div className="bg-white border border-gray-100 rounded-2xl p-6 space-y-6">
+          <div className="bg-[#0f0f16] border border-white/5 rounded-2xl p-6 space-y-6">
             <div>
               <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${catColor} mb-3`}>
                 {catLabel}
               </span>
-              <h1 className="text-xl font-bold text-gray-900">{ad.title}</h1>
+              <h1 className="text-xl font-bold text-gray-100">{ad.title}</h1>
               {ad.description && (
-                <p className="text-sm text-gray-500 mt-2 leading-relaxed">{ad.description}</p>
+                <p className="text-sm text-gray-400 mt-2 leading-relaxed">{ad.description}</p>
               )}
             </div>
 
-            <div className="border-t border-gray-100 pt-4 space-y-3">
+            <div className="border-t border-white/5 pt-4 space-y-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500">Reklam Grubu</span>
-                <span className="font-medium text-gray-800">{catLabel}</span>
+                <span className="text-gray-400">Reklam Grubu</span>
+                <span className="font-medium text-gray-100">{catLabel}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500">Platform</span>
-                <span className="font-medium text-gray-800">
+                <span className="text-gray-400">Platform</span>
+                <span className="font-medium text-gray-100">
                   {ad.platform === "mobile" ? "Mobil" : ad.platform === "desktop" ? "Masaüstü" : "Hepsi (Mobil / Masaüstü)"}
                 </span>
               </div>
               {ad.channelTag && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Kanal Etiketi</span>
-                  <span className="font-mono font-medium text-gray-800 bg-gray-50 px-2 py-0.5 rounded text-xs">
+                  <span className="text-gray-400">Kanal Etiketi</span>
+                  <span className="font-mono font-medium text-gray-100 bg-[#050508] px-2 py-0.5 rounded text-xs">
                     {ad.channelTag}
                   </span>
                 </div>
               )}
               {activeCampaign && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Durum</span>
+                  <span className="text-gray-400">Durum</span>
                   <span className="text-green-600 font-medium text-xs bg-green-50 px-2 py-0.5 rounded-full">
                     Yayında
                   </span>
@@ -177,18 +177,18 @@ async function renderDetail(ad: any, tag: string) {
               )}
             </div>
 
-            <div className="border-t border-gray-100 pt-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">ÖLÇÜLER (En/Boy)</h3>
+            <div className="border-t border-white/5 pt-4">
+              <h3 className="text-sm font-semibold text-gray-300 mb-3">ÖLÇÜLER (En/Boy)</h3>
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-gray-50 rounded-xl p-4 text-center">
+                <div className="bg-[#050508] rounded-xl p-4 text-center">
                   <p className="text-xs text-gray-400 mb-1">Masaüstü</p>
-                  <p className="text-lg font-bold text-gray-800 font-mono">
+                  <p className="text-lg font-bold text-gray-100 font-mono">
                     {ad.dimensions || ad.dimensions || "-"}
                   </p>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4 text-center">
+                <div className="bg-[#050508] rounded-xl p-4 text-center">
                   <p className="text-xs text-gray-400 mb-1">Mobil</p>
-                  <p className="text-lg font-bold text-gray-800 font-mono">
+                  <p className="text-lg font-bold text-gray-100 font-mono">
                     {ad.mobileDimensions || "600"}
                   </p>
                 </div>
@@ -196,7 +196,7 @@ async function renderDetail(ad: any, tag: string) {
             </div>
 
             {ad.price && (
-              <div className="border-t border-gray-100 pt-4">
+              <div className="border-t border-white/5 pt-4">
                 <div className="bg-blue-50 rounded-xl p-4 text-center">
                   <p className="text-xs text-blue-500 mb-1">FİYAT</p>
                   <p className="text-2xl font-bold text-blue-700">{ad.price}</p>
@@ -204,7 +204,7 @@ async function renderDetail(ad: any, tag: string) {
               </div>
             )}
 
-            <div className="border-t border-gray-100 pt-4">
+            <div className="border-t border-white/5 pt-4">
               <Link
                 href={`mailto:info@gunyayla.com.tr?subject=${encodeURIComponent("Reklam Talebi: " + ad.title)}`}
                 className="block w-full bg-blue-600 text-white text-center rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 transition"
@@ -213,7 +213,7 @@ async function renderDetail(ad: any, tag: string) {
               </Link>
               <a
                 href="tel:+905529512629"
-                className="block w-full bg-white border border-gray-200 text-center rounded-xl py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition mt-2"
+                className="block w-full bg-[#0f0f16] border border-white/10 text-center rounded-xl py-3 text-sm font-semibold text-gray-300 hover:bg-[#050508] transition mt-2"
               >
                 +90 (552) 951 26 29
               </a>

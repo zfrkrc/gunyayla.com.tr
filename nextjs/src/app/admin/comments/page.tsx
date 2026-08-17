@@ -63,7 +63,7 @@ export default function CommentsPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-2">💬 Yorumlar</h1>
-      <p className="text-sm text-gray-500 mb-6">Toplam {data?.total || 0} yorum</p>
+      <p className="text-sm text-gray-400 mb-6">Toplam {data?.total || 0} yorum</p>
 
       {msg && (
         <div className="mb-4 px-4 py-2 rounded-lg text-sm bg-blue-50 text-blue-700 border border-blue-100">
@@ -75,14 +75,14 @@ export default function CommentsPage() {
         {data?.comments.length === 0 ? (
           <div className="text-center py-10 text-gray-400">Henüz yorum yok</div>
         ) : data?.comments.map(c => (
-          <div key={c.id} className="bg-white border border-gray-100 rounded-xl p-4">
+          <div key={c.id} className="bg-[#0f0f16] border border-white/5 rounded-xl p-4">
             <div className="flex items-start justify-between gap-4 mb-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
+                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-400">
                   {c.member?.name?.[0]?.toUpperCase() || "?"}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-800">{c.member?.name || "Anonim"}</p>
+                  <p className="text-sm font-medium text-gray-100">{c.member?.name || "Anonim"}</p>
                   <p className="text-xs text-gray-400">{c.member?.email || ""}</p>
                 </div>
               </div>
@@ -99,7 +99,7 @@ export default function CommentsPage() {
             </div>
 
             <div
-              className="text-sm text-gray-700 prose prose-sm max-w-none mb-3"
+              className="text-sm text-gray-300 prose prose-sm max-w-none mb-3"
               dangerouslySetInnerHTML={{ __html: c.html || "" }}
             />
 

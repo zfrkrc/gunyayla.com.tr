@@ -31,22 +31,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="flex gap-8">
         <aside className="w-56 shrink-0">
           <nav className="space-y-1 sticky top-6">
-            <Link href="/admin" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+            <Link href="/admin" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-[#0f0f16] transition">
               📊 Panel
             </Link>
-            <Link href="/admin/feedback" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+            <Link href="/admin/feedback" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-[#0f0f16] transition">
               👍 Beğeniler
             </Link>
-            <Link href="/admin/comments" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+            <Link href="/admin/comments" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-[#0f0f16] transition">
               💬 Yorumlar
             </Link>
-            <Link href="/admin/members" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+            <Link href="/admin/news-submissions" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-[#0f0f16] transition">
+              📨 Haber Başvuruları
+            </Link>
+            <Link href="/admin/members" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-[#0f0f16] transition">
               👥 Üyeler
             </Link>
-            <Link href="/admin/rss-sources" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+            <Link href="/admin/rss-sources" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-[#0f0f16] transition">
               📡 RSS Kaynakları
             </Link>
-            <Link href="/admin/reklam" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
+            <Link href="/admin/reklam" className="block px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-[#0f0f16] transition">
               📢 Reklam
             </Link>
             <a href="/ghost" target="_blank" className="block px-4 py-2 rounded-lg text-sm font-medium text-blue-600 hover:bg-blue-50 transition">

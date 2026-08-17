@@ -14,7 +14,7 @@ export default async function KoyPage() {
     return (
       <div className="text-center py-32">
         <h1 className="text-3xl font-bold text-gray-400 mb-4">Henüz köy haberi yok</h1>
-        <p className="text-gray-500">Yakında güncel köy haberleri burada olacak.</p>
+        <p className="text-gray-400">Yakında güncel köy haberleri burada olacak.</p>
       </div>
     )
   }
@@ -29,8 +29,8 @@ export default async function KoyPage() {
       <div className="flex items-center gap-3">
         <span className="w-1 h-8 bg-green-700 rounded-full" />
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Köy Haberleri</h1>
-          <p className="text-sm text-gray-500">Köyümüze özel haberler ve duyurular</p>
+          <h1 className="text-2xl font-bold text-gray-100">Köy Haberleri</h1>
+          <p className="text-sm text-gray-400">Köyümüze özel haberler ve duyurular</p>
         </div>
       </div>
 
@@ -51,8 +51,8 @@ export default async function KoyPage() {
       <section>
         <div className="flex items-center gap-3 mb-5">
           <span className="w-1 h-6 bg-green-700 rounded-full" />
-          <h2 className="text-lg font-bold text-gray-800">Son Köy Haberleri</h2>
-          <div className="flex-1 border-t border-gray-200" />
+          <h2 className="text-lg font-bold text-gray-100">Son Köy Haberleri</h2>
+          <div className="flex-1 border-t border-white/10" />
         </div>
 
         {initialList.length > 0 ? (

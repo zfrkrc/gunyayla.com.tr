@@ -39,7 +39,7 @@ export default function AlbumPage({ params }: AlbumPageProps) {
       <div className="mb-6">
         <Link href="/galeri" className="text-blue-500 text-sm hover:underline">← Galeriye dön</Link>
         <h1 className="text-3xl font-bold mt-2">{album.title}</h1>
-        {album.description && <p className="text-gray-500 mt-1">{album.description}</p>}
+        {album.description && <p className="text-gray-400 mt-1">{album.description}</p>}
         {album.newsPostId && (
           <Link href={`/haberler/${album.newsPostId}`} className="text-blue-500 text-sm hover:underline mt-1 inline-block">
             İlgili haberi okuyun →
@@ -53,7 +53,7 @@ export default function AlbumPage({ params }: AlbumPageProps) {
           <button
             key={photo.id}
             onClick={() => setLightbox(idx)}
-            className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 hover:opacity-90 transition"
+            className="relative aspect-square rounded-lg overflow-hidden bg-[#0f0f16] hover:opacity-90 transition"
           >
             <Image src={photo.url} alt={photo.caption ?? ""} fill className="object-cover" />
           </button>
@@ -67,7 +67,7 @@ export default function AlbumPage({ params }: AlbumPageProps) {
           onClick={() => setLightbox(null)}
         >
           <button
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl px-4 py-2 hover:bg-white/10 rounded"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl px-4 py-2 hover:bg-[#0f0f16]/10 rounded"
             onClick={(e) => { e.stopPropagation(); setLightbox((l) => Math.max(0, (l ?? 0) - 1)) }}
           >‹</button>
 
@@ -86,12 +86,12 @@ export default function AlbumPage({ params }: AlbumPageProps) {
           </div>
 
           <button
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl px-4 py-2 hover:bg-white/10 rounded"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl px-4 py-2 hover:bg-[#0f0f16]/10 rounded"
             onClick={(e) => { e.stopPropagation(); setLightbox((l) => Math.min(photos.length - 1, (l ?? 0) + 1)) }}
           >›</button>
 
           <button
-            className="absolute top-4 right-4 text-white text-2xl hover:bg-white/10 rounded px-3 py-1"
+            className="absolute top-4 right-4 text-white text-2xl hover:bg-[#0f0f16]/10 rounded px-3 py-1"
             onClick={() => setLightbox(null)}
           >✕</button>
         </div>

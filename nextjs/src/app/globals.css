@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-light: #dbeafe;
-  --color-primary-dark: #1e40af;
+  --color-primary: #1a3a5c;
+  --color-primary-hover: #234d78;
+  --color-primary-light: #1a3a5c1a;
+  --color-primary-dark: #0f2238;
 }
 
 html { scroll-behavior: smooth; }
@@ -22,7 +22,7 @@ body { -webkit-font-smoothing: antialiased; }
 
 @layer base {
   * { box-sizing: border-box; }
-  body { @apply bg-gray-50 text-gray-900 antialiased; }
+  body { @apply bg-[#050508] text-gray-100 antialiased; }
 }
 
 @layer components {

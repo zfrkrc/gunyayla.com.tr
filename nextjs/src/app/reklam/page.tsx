@@ -39,8 +39,8 @@ export default async function ReklamPage() {
     <div className="max-w-4xl mx-auto px-4">
       {/* Header */}
       <div className="text-center mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Reklam</h1>
-        <p className="text-gray-500 text-sm md:text-base">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-100 mb-3">Reklam</h1>
+        <p className="text-gray-400 text-sm md:text-base">
           GünYayla.com.tr reklam seçenekleri ve fiyat bilgileri
         </p>
       </div>
@@ -76,7 +76,7 @@ export default async function ReklamPage() {
         <div className="space-y-12">
           {Object.entries(grouped).map(([cat, items]) => (
             <section key={cat}>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-5 flex items-center gap-2">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-100 mb-5 flex items-center gap-2">
                 <span className="w-1 h-6 bg-blue-500 rounded-full inline-block" />
                 {categoryLabels[cat] || cat}
                 <span className="text-sm font-normal text-gray-400">({items.length} seçenek)</span>
@@ -86,11 +86,11 @@ export default async function ReklamPage() {
                   const hasActiveCampaign = activeAdIds.has(ad.id)
                   return (
                     <Link key={ad.id} href={`/reklam/${ad.channelTag || ad.id}`} className="block group">
-                      <div className="bg-white border border-gray-100 rounded-xl p-5 md:p-6 hover:shadow-lg hover:border-blue-100 transition-all">
+                      <div className="bg-[#0f0f16] border border-white/5 rounded-xl p-5 md:p-6 hover:shadow-lg hover:border-blue-100 transition-all">
                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <h3 className="font-semibold text-gray-900 text-sm md:text-base group-hover:text-blue-600 transition-colors">
+                              <h3 className="font-semibold text-gray-100 text-sm md:text-base group-hover:text-blue-600 transition-colors">
                                 {ad.title}
                               </h3>
                               {hasActiveCampaign && (
@@ -103,11 +103,11 @@ export default async function ReklamPage() {
                               </span>
                             </div>
                             {ad.description && (
-                              <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">{ad.description}</p>
+                              <p className="text-sm text-gray-400 mt-1.5 leading-relaxed">{ad.description}</p>
                             )}
                             <div className="flex items-center gap-3 mt-2 flex-wrap">
                               {ad.channelTag && (
-                                <span className="text-xs text-gray-400 font-mono bg-gray-50 px-2 py-1 rounded">
+                                <span className="text-xs text-gray-400 font-mono bg-[#050508] px-2 py-1 rounded">
                                   {ad.channelTag}
                                 </span>
                               )}
@@ -129,7 +129,7 @@ export default async function ReklamPage() {
                                 {ad.price}
                               </div>
                             ) : (
-                              <div className="bg-gray-50 text-gray-400 text-xs px-5 py-3 rounded-xl text-center min-w-[100px]">
+                              <div className="bg-[#050508] text-gray-400 text-xs px-5 py-3 rounded-xl text-center min-w-[100px]">
                                 Bilgi alın
                               </div>
                             )}
@@ -146,8 +146,8 @@ export default async function ReklamPage() {
       )}
 
       {/* Alt iletişim */}
-      <div className="mt-12 bg-gray-50 border border-gray-200 rounded-2xl p-6 md:p-8 text-center">
-        <p className="text-gray-600 text-sm md:text-base mb-4">
+      <div className="mt-12 bg-[#050508] border border-white/10 rounded-2xl p-6 md:p-8 text-center">
+        <p className="text-gray-400 text-sm md:text-base mb-4">
           Reklam vermek, ortak çalışma ve kampanya fırsatları için bizimle iletişime geçin.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -159,7 +159,7 @@ export default async function ReklamPage() {
           </a>
           <a
             href="mailto:info@gunyayla.com.tr"
-            className="bg-white border border-gray-200 text-gray-700 px-6 py-3 rounded-xl text-sm font-semibold hover:bg-gray-50 transition w-full sm:w-auto text-center"
+            className="bg-[#0f0f16] border border-white/10 text-gray-300 px-6 py-3 rounded-xl text-sm font-semibold hover:bg-[#050508] transition w-full sm:w-auto text-center"
           >
             info@gunyayla.com.tr
           </a>

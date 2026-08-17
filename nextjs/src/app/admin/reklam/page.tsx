@@ -290,48 +290,48 @@ export default function AdminReklamPage() {
       {/* Reklam Alani Formu */}
       {showSpotForm && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowSpotForm(false)}>
-          <div className="bg-white rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+          <div className="bg-[#0f0f16] rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <h2 className="text-lg font-bold mb-4">{editSpot ? "Alanı Düzenle" : "Yeni Reklam Alanı"}</h2>
             <form onSubmit={saveSpot} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Başlık <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Başlık <span className="text-red-500">*</span></label>
                 <input value={spotTitle} onChange={e => setSpotTitle(e.target.value)} required placeholder="Örn: Blok Reklam (Header Altı)"
-                  className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Kategori</label>
                   <select value={spotCategory} onChange={e => setSpotCategory(e.target.value)}
-                    className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                     {categoryOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Sıra</label>
                   <input type="number" value={spotOrder} onChange={e => setSpotOrder(Number(e.target.value))}
-                    className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Açıklama</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Açıklama</label>
                 <textarea value={spotDesc} onChange={e => setSpotDesc(e.target.value)} rows={2} placeholder="Reklam alanının konumu ve açıklaması"
-                  className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Fiyat</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Fiyat</label>
                 <input value={spotPrice} onChange={e => setSpotPrice(e.target.value)} placeholder="Örn: 5.000 TL / ay"
-                  className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Kanal Etiketi</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Kanal Etiketi</label>
                   <input value={spotChannelTag} onChange={e => setSpotChannelTag(e.target.value)} placeholder="Örn: ana-1"
-                    className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Platform</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Platform</label>
                   <select value={spotPlatform} onChange={e => setSpotPlatform(e.target.value)}
-                    className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                     <option value="all">Hepsi (Mobil / Masaüstü)</option>
                     <option value="desktop">Sadece Masaüstü</option>
                     <option value="mobile">Sadece Mobil</option>
@@ -339,28 +339,28 @@ export default function AdminReklamPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Masaüstü Boyut</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Masaüstü Boyut</label>
                 <div className="flex gap-2">
                   <input value={spotDims} onChange={e => setSpotDims(e.target.value)} placeholder="Örn: 728x90"
-                    className="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    className="flex-1 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
                   <select onChange={e => { if (e.target.value) setSpotDims(e.target.value) }} value=""
-                    className="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    className="border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400">
                     <option value="">Hazır</option>
                     {dimensionPresets.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
                   </select>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Mobil Boyut</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Mobil Boyut</label>
                 <input value={spotMobileDims} onChange={e => setSpotMobileDims(e.target.value)} placeholder="Örn: 600"
-                  className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div className="flex gap-2 pt-2">
                 <button type="submit" className="flex-1 bg-blue-600 text-white rounded-lg py-2 text-sm font-medium hover:bg-blue-700 transition">
                   {editSpot ? "Güncelle" : "Oluştur"}
                 </button>
                 <button type="button" onClick={() => { setShowSpotForm(false); resetSpotForm() }}
-                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition">İptal</button>
+                  className="px-4 py-2 text-sm text-gray-400 hover:text-gray-100 transition">İptal</button>
               </div>
             </form>
           </div>
@@ -370,13 +370,13 @@ export default function AdminReklamPage() {
       {/* Kampanya Formu */}
       {showCampForm && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowCampForm(false)}>
-          <div className="bg-white rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+          <div className="bg-[#0f0f16] rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <h2 className="text-lg font-bold mb-4">{editCampaign ? "Kampanyayı Düzenle" : "Yeni Kampanya"}</h2>
             <form onSubmit={saveCampaign} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Reklam Alanı <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Reklam Alanı <span className="text-red-500">*</span></label>
                 <select value={campAdId} onChange={e => setCampAdId(e.target.value)} required
-                  className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                  className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                   <option value="">-- Seçin --</option>
                   {ads.filter(a => a.status === "active").map(a => (
                     <option key={a.id} value={a.id}>{a.title}</option>
@@ -385,39 +385,39 @@ export default function AdminReklamPage() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Müşteri Adı</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Müşteri Adı</label>
                   <input value={campClient} onChange={e => setCampClient(e.target.value)} placeholder="Firma adı"
-                    className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">İletişim</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">İletişim</label>
                   <input value={campContact} onChange={e => setCampContact(e.target.value)} placeholder="Tel / Email"
-                    className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Başlangıç Tarihi</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Başlangıç Tarihi</label>
                   <input type="date" value={campStart} onChange={e => setCampStart(e.target.value)}
-                    className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Süre (ay)</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Süre (ay)</label>
                   <input type="number" min={1} value={campDuration} onChange={e => setCampDuration(Number(e.target.value))}
-                    className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Anlaşılan Fiyat</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Anlaşılan Fiyat</label>
                 <input value={campPrice} onChange={e => setCampPrice(e.target.value)} placeholder="Örn: 4.500 TL"
-                  className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Banner Görseli (Masaüstü)</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Banner Görseli (Masaüstü)</label>
                 <div className="flex gap-2">
                   <input value={campBannerUrl} onChange={e => setCampBannerUrl(e.target.value)} placeholder="URL veya yükle"
-                    className="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
-                  <label className="shrink-0 cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-2 rounded-lg text-sm transition">
+                    className="flex-1 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  <label className="shrink-0 cursor-pointer bg-[#0f0f16] hover:bg-gray-200 text-gray-400 px-3 py-2 rounded-lg text-sm transition">
                     📁
                     <input type="file" accept="image/*" className="hidden" onChange={async e => {
                       const file = e.target.files?.[0]
@@ -440,11 +440,11 @@ export default function AdminReklamPage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Banner Görseli (Mobil)</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Banner Görseli (Mobil)</label>
                 <div className="flex gap-2">
                   <input value={campBannerMobileUrl} onChange={e => setCampBannerMobileUrl(e.target.value)} placeholder="URL veya yükle"
-                    className="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
-                  <label className="shrink-0 cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-2 rounded-lg text-sm transition">
+                    className="flex-1 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  <label className="shrink-0 cursor-pointer bg-[#0f0f16] hover:bg-gray-200 text-gray-400 px-3 py-2 rounded-lg text-sm transition">
                     📁
                     <input type="file" accept="image/*" className="hidden" onChange={async e => {
                       const file = e.target.files?.[0]
@@ -466,21 +466,21 @@ export default function AdminReklamPage() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Link (tıklanınca gidilecek URL)</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Link (tıklanınca gidilecek URL)</label>
                 <input value={campLinkUrl} onChange={e => setCampLinkUrl(e.target.value)} placeholder="https://ornek.com"
-                  className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Notlar</label>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Notlar</label>
                 <textarea value={campNotes} onChange={e => setCampNotes(e.target.value)} rows={2}
-                  className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
               </div>
               <div className="flex gap-2 pt-2">
                 <button type="submit" className="flex-1 bg-blue-600 text-white rounded-lg py-2 text-sm font-medium hover:bg-blue-700 transition">
                   {editCampaign ? "Güncelle" : "Oluştur"}
                 </button>
                 <button type="button" onClick={() => { setShowCampForm(false); resetCampForm() }}
-                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition">İptal</button>
+                  className="px-4 py-2 text-sm text-gray-400 hover:text-gray-100 transition">İptal</button>
               </div>
             </form>
           </div>
@@ -502,7 +502,7 @@ export default function AdminReklamPage() {
             if (items.length === 0) return null
             return (
               <div key={cat}>
-                <h3 className="font-semibold text-gray-700 mb-2 text-sm uppercase tracking-wide">
+                <h3 className="font-semibold text-gray-300 mb-2 text-sm uppercase tracking-wide">
                   {categoryOptions.find(o => o.value === cat)?.label} ({items.length})
                 </h3>
                 <div className="space-y-2">
@@ -510,17 +510,17 @@ export default function AdminReklamPage() {
                     const campaigns = campaignsByAd[ad.id] || []
                     const isActive = ad.status === "active"
                     return (
-                      <div key={ad.id} className={`border rounded-lg p-4 ${isActive ? "bg-white border-gray-100" : "bg-gray-50 border-gray-100 opacity-70"}`}>
+                      <div key={ad.id} className={`border rounded-lg p-4 ${isActive ? "bg-[#0f0f16] border-white/5" : "bg-[#050508] border-white/5 opacity-70"}`}>
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className={`w-2 h-2 rounded-full ${isActive ? "bg-green-500" : "bg-gray-300"}`} />
                             <span className="font-medium text-sm">{ad.title}</span>
-                            <span className="text-xs bg-gray-100 text-gray-400 font-mono px-1.5 py-0.5 rounded">#{ad.sortOrder}</span>
-                            {ad.channelTag && <span className="text-xs bg-gray-100 text-gray-500 font-mono px-1.5 py-0.5 rounded">{ad.channelTag}</span>}
+                            <span className="text-xs bg-[#0f0f16] text-gray-400 font-mono px-1.5 py-0.5 rounded">#{ad.sortOrder}</span>
+                            {ad.channelTag && <span className="text-xs bg-[#0f0f16] text-gray-400 font-mono px-1.5 py-0.5 rounded">{ad.channelTag}</span>}
                             {ad.price && <span className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded">{ad.price}</span>}
                             {ad.dimensions && <span className="text-xs text-gray-400 font-mono">{ad.dimensions}</span>}
                             {ad.platform !== "all" && <span className="text-xs text-gray-400">{ad.platform === "mobile" ? "📱" : "💻"}</span>}
-                            {!isActive && <span className="text-xs bg-gray-200 text-gray-500 px-2 py-0.5 rounded">Pasif</span>}
+                            {!isActive && <span className="text-xs bg-gray-200 text-gray-400 px-2 py-0.5 rounded">Pasif</span>}
                           </div>
                           <div className="flex items-center gap-2">
                             <button onClick={() => openCampForm(undefined, ad.id)}
@@ -544,10 +544,10 @@ export default function AdminReklamPage() {
                               const remaining = c.durationMonths ? c.durationMonths - months : 0
                               const campActive = c.status === "active"
                               return (
-                                <div key={c.id} className={`flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs rounded px-3 py-2 ${campActive ? "bg-gray-50" : "bg-gray-100 opacity-60"}`}>
+                                <div key={c.id} className={`flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs rounded px-3 py-2 ${campActive ? "bg-[#050508]" : "bg-[#0f0f16] opacity-60"}`}>
                                   <div className="flex items-center gap-2 flex-wrap">
                                     <span className={`w-1.5 h-1.5 rounded-full ${campActive ? "bg-green-500" : "bg-gray-400"}`} />
-                                    <span className="font-medium text-gray-700">{c.clientName || "İsimsiz"}</span>
+                                    <span className="font-medium text-gray-300">{c.clientName || "İsimsiz"}</span>
                                     {c.startDate && (
                                       <span className="text-gray-400">
                                         {new Date(c.startDate).toLocaleDateString("tr-TR")}
@@ -560,7 +560,7 @@ export default function AdminReklamPage() {
                                         }
                                       </span>
                                     )}
-                                    {c.priceAgreed && <span className="font-mono text-gray-500">{c.priceAgreed}</span>}
+                                    {c.priceAgreed && <span className="font-mono text-gray-400">{c.priceAgreed}</span>}
                                     {c.clientContact && <span className="text-gray-400">{c.clientContact}</span>}
                                     {c.bannerUrl && <span className="text-green-500 font-medium">🖼️ Banner var</span>}
                                   </div>

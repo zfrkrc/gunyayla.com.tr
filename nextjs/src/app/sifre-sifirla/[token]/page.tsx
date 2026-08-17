@@ -50,10 +50,10 @@ export default function ResetPasswordPage() {
   if (done) {
     return (
       <div className="max-w-md mx-auto mt-12">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+        <div className="bg-[#0f0f16] rounded-2xl shadow-sm border border-white/5 p-8 text-center">
           <div className="text-4xl mb-4">✅</div>
           <h1 className="text-xl font-bold mb-2">Şifreniz sıfırlandı</h1>
-          <p className="text-sm text-gray-500 mb-4">Yeni şifrenizle giriş yapabilirsiniz.</p>
+          <p className="text-sm text-gray-400 mb-4">Yeni şifrenizle giriş yapabilirsiniz.</p>
           <button
             onClick={() => router.push("/login")}
             className="bg-blue-600 text-white rounded-lg px-6 py-2.5 text-sm font-medium hover:bg-blue-700 transition"
@@ -67,9 +67,9 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="max-w-md mx-auto mt-12">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+      <div className="bg-[#0f0f16] rounded-2xl shadow-sm border border-white/5 p-8">
         <h1 className="text-2xl font-bold text-center mb-2">Yeni Şifre Belirleyin</h1>
-        <p className="text-sm text-gray-500 text-center mb-6">Hesabınız için yeni bir şifre oluşturun.</p>
+        <p className="text-sm text-gray-400 text-center mb-6">Hesabınız için yeni bir şifre oluşturun.</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -79,7 +79,7 @@ export default function ResetPasswordPage() {
             onChange={e => setPassword(e.target.value)}
             required
             minLength={8}
-            className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-white/10 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <input
             type="password"
@@ -88,7 +88,7 @@ export default function ResetPasswordPage() {
             onChange={e => setConfirm(e.target.value)}
             required
             minLength={8}
-            className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border border-white/10 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
 
           {error && <p className="text-red-500 text-xs">{error}</p>}

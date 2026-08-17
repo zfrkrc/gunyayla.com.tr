@@ -11,8 +11,8 @@ export default async function HaberlerPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Haberler</h1>
-        <p className="text-gray-500 mt-1">Tüm güncel haberler</p>
+        <h1 className="text-3xl font-bold text-gray-100">Haberler</h1>
+        <p className="text-gray-400 mt-1">Tüm güncel haberler</p>
       </div>
 
       {posts.length === 0 ? (

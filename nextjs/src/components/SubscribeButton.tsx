@@ -36,7 +36,7 @@ export function SubscribeButton() {
         onChange={e => setEmail(e.target.value)}
         placeholder="E-posta adresin"
         required
-        className="flex-1 min-w-0 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+        className="flex-1 min-w-0 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
       />
       <button
         type="submit"
@@ -45,7 +45,7 @@ export function SubscribeButton() {
       >
         {sending ? "…" : "Abone Ol"}
       </button>
-      {message && <span className="text-xs text-gray-500 self-center">{message}</span>}
+      {message && <span className="text-xs text-gray-400 self-center">{message}</span>}
     </form>
   )
 }

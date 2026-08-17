@@ -2,6 +2,8 @@ import { getPost, getSiteSettings } from "@/lib/ghost"
 import Image from "next/image"
 import Link from "next/link"
 import { AdDisplay } from "@/components/AdDisplay"
+import { tagColor } from "@/lib/tagColors"
+import { ShareButtons } from "@/components/ShareButtons"
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 60
@@ -28,7 +30,7 @@ export default async function PostPage({ params }: Props) {
   const { slug } = await params
   const post = await getPost(slug)
   const settings = await getSiteSettings()
-  const accentColor = settings?.accent_color || "#2563eb"
+  const accentColor = settings?.accent_color || "#E8A020"
 
   if (!post) {
     return (
@@ -42,12 +44,6 @@ export default async function PostPage({ params }: Props) {
   const date = new Date(post.published_at).toLocaleDateString("tr-TR", {
     day: "numeric", month: "long", year: "numeric",
   })
-
-  const tagColors: Record<string, string> = {
-    news: "bg-red-600", spor: "bg-green-600", ekonomi: "bg-blue-600",
-    teknoloji: "bg-purple-600", kültür: "bg-orange-600", sanat: "bg-pink-600",
-    sağlık: "bg-teal-600", eğitim: "bg-indigo-600",
-  }
 
   return (
     <article className="max-w-4xl mx-auto">
@@ -68,7 +64,7 @@ export default async function PostPage({ params }: Props) {
       {post.tags?.[0] && (
         <span
           className={`inline-block text-xs font-bold text-white px-3 py-1 rounded-full mb-4 uppercase tracking-wider ${
-            tagColors[post.tags[0].slug] || "bg-gray-700"
+            tagColor(post.tags[0].slug)
           }`}
         >
           {post.tags[0].name}
@@ -76,27 +72,30 @@ export default async function PostPage({ params }: Props) {
       )}
 
       {/* Başlık */}
-      <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-4">
+      <h1 className="text-3xl md:text-5xl font-bold text-gray-100 leading-tight mb-4">
         {post.title}
       </h1>
 
       {/* Meta */}
-      <div className="flex items-center gap-3 text-sm text-gray-400 mb-8 pb-6 border-b border-gray-100">
-        <span>{date}</span>
-        <span className="w-1 h-1 bg-gray-300 rounded-full" />
-        <span>{post.reading_time ?? 1} dk okuma</span>
-        {post.authors?.[0] && (
-          <>
-            <span className="w-1 h-1 bg-gray-300 rounded-full" />
-            <span>{post.authors[0].name}</span>
-          </>
-        )}
+      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-gray-400 mb-8 pb-6 border-b border-white/5">
+        <div className="flex items-center gap-3">
+          <span>{date}</span>
+          <span className="w-1 h-1 bg-gray-300 rounded-full" />
+          <span>{post.reading_time ?? 1} dk okuma</span>
+          {post.authors?.[0] && (
+            <>
+              <span className="w-1 h-1 bg-gray-300 rounded-full" />
+              <span>{post.authors[0].name}</span>
+            </>
+          )}
+        </div>
+        <ShareButtons title={post.title} slug={post.slug} />
       </div>
 
       {/* ─── İçerik ──────────────────────────────────────── */}
       <AdDisplay category="altsayfa" className="mb-6 flex justify-center" />
       <div
-        className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-a:text-primary prose-img:rounded-xl prose-img:shadow-md"
+        className="prose prose-lg max-w-none prose-headings:text-gray-100 prose-a:text-primary prose-img:rounded-xl prose-img:shadow-md"
         dangerouslySetInnerHTML={{ __html: post.html || "<p>İçerik bulunamadı.</p>" }}
       />
       <AdDisplay category="paragraf" className="mt-6 flex justify-center" />

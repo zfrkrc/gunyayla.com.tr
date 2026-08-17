@@ -149,10 +149,26 @@ export const postFeedback = pgTable("post_feedback", {
   index("feedback_postId_idx").on(table.postId),
 ])
 
+// ── Haber Gönder (okur başvurusu) ────────────────────────
+export const newsSubmissions = pgTable("news_submissions", {
+  id:        text("id").primaryKey(),
+  name:      text("name").notNull(),
+  email:     text("email"),
+  phone:     text("phone"),
+  title:     text("title").notNull(),
+  content:   text("content").notNull(),
+  status:    text("status").default("pending"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("news_submissions_status_idx").on(table.status),
+])
+
 export type Comment = typeof comments.$inferSelect
 export type NewComment = typeof comments.$inferInsert
 export type PostFeedback = typeof postFeedback.$inferSelect
 export type NewPostFeedback = typeof postFeedback.$inferInsert
+export type NewsSubmission = typeof newsSubmissions.$inferSelect
+export type NewNewsSubmission = typeof newsSubmissions.$inferInsert
 
 const buildDatabaseUrl = () => {
   const host = process.env.POSTGRES_HOST
@@ -170,5 +186,5 @@ const buildDatabaseUrl = () => {
 
 const client = postgres(buildDatabaseUrl())
 export const db = drizzle(client, {
-  schema: { user, session, account, verification, albums, photos, ads, adCampaigns, comments, postFeedback },
+  schema: { user, session, account, verification, albums, photos, ads, adCampaigns, comments, postFeedback, newsSubmissions },
 })

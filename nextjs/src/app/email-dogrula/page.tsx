@@ -11,10 +11,10 @@ function EmailDogrulaContent() {
   if (status === "success") {
     return (
       <div className="max-w-md mx-auto mt-12">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+        <div className="bg-[#0f0f16] rounded-2xl shadow-sm border border-white/5 p-8 text-center">
           <div className="text-4xl mb-4">✅</div>
           <h1 className="text-xl font-bold mb-2">E-posta doğrulandı</h1>
-          <p className="text-sm text-gray-500 mb-4">Hesabınız başarıyla doğrulandı.</p>
+          <p className="text-sm text-gray-400 mb-4">Hesabınız başarıyla doğrulandı.</p>
           <button
             onClick={() => router.push("/")}
             className="bg-blue-600 text-white rounded-lg px-6 py-2.5 text-sm font-medium hover:bg-blue-700 transition"
@@ -29,10 +29,10 @@ function EmailDogrulaContent() {
   if (status === "error") {
     return (
       <div className="max-w-md mx-auto mt-12">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+        <div className="bg-[#0f0f16] rounded-2xl shadow-sm border border-white/5 p-8 text-center">
           <div className="text-4xl mb-4">❌</div>
           <h1 className="text-xl font-bold mb-2">Doğrulama başarısız</h1>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-gray-400 mb-4">
             Bağlantı geçersiz veya süresi dolmuş olabilir.
           </p>
           <button
@@ -48,9 +48,9 @@ function EmailDogrulaContent() {
 
   return (
     <div className="max-w-md mx-auto mt-12">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+      <div className="bg-[#0f0f16] rounded-2xl shadow-sm border border-white/5 p-8 text-center">
         <h1 className="text-xl font-bold mb-2">E-posta Doğrulama</h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-400">
           E-posta adresinize gönderilen bağlantıya tıklayarak hesabınızı doğrulayın.
         </p>
       </div>

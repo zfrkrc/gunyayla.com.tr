@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
+import { tagColor } from "@/lib/tagColors"
 
 type Post = {
   id: string
@@ -10,17 +11,6 @@ type Post = {
   published_at: string
   reading_time?: number
   tags?: { name: string; slug: string }[]
-}
-
-const tagColors: Record<string, string> = {
-  news: "bg-red-600",
-  spor: "bg-green-600",
-  ekonomi: "bg-blue-600",
-  teknoloji: "bg-purple-600",
-  kültür: "bg-orange-600",
-  sanat: "bg-pink-600",
-  sağlık: "bg-teal-600",
-  eğitim: "bg-indigo-600",
 }
 
 export function NewsCard({
@@ -34,7 +24,7 @@ export function NewsCard({
     day: "numeric", month: "long", year: "numeric",
   })
 
-  const tagBg = tagColors[post.tags?.[0]?.slug || ""] || "bg-blue-600"
+  const tagBg = tagColor(post.tags?.[0]?.slug || "")
 
   if (variant === "hero") {
     return (
@@ -70,7 +60,7 @@ export function NewsCard({
           )}
           <div className="flex items-center gap-3 text-gray-400 text-xs">
             <span>{date}</span>
-            <span className="w-1 h-1 bg-gray-500 rounded-full" />
+            <span className="w-1 h-1 bg-[#050508]0 rounded-full" />
             <span>{post.reading_time ?? 1} dk okuma</span>
           </div>
         </div>
@@ -113,7 +103,7 @@ export function NewsCard({
   return (
     <Link
       href={`/haberler/${post.slug}`}
-      className="group block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all overflow-hidden"
+      className="group block bg-[#0f0f16] rounded-xl border border-white/5 shadow-sm hover:shadow-lg transition-all overflow-hidden"
     >
       {post.feature_image && (
         <div className="relative h-44 overflow-hidden">
@@ -131,11 +121,11 @@ export function NewsCard({
             {post.tags[0].name}
           </span>
         )}
-        <h2 className="font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition leading-snug">
+        <h2 className="font-bold text-gray-100 mb-2 line-clamp-2 group-hover:text-blue-600 transition leading-snug">
           {post.title}
         </h2>
         {post.excerpt && (
-          <p className="text-sm text-gray-500 line-clamp-2 mb-3 leading-relaxed">
+          <p className="text-sm text-gray-400 line-clamp-2 mb-3 leading-relaxed">
             {post.excerpt}
           </p>
         )}

@@ -114,20 +114,20 @@ export default function RssSourcesPage() {
         </div>
       )}
 
-      <div className="bg-white border border-gray-100 rounded-xl p-6 mb-6">
-        <h2 className="font-semibold text-gray-800 mb-4">Yeni Kaynak Ekle</h2>
+      <div className="bg-[#0f0f16] border border-white/5 rounded-xl p-6 mb-6">
+        <h2 className="font-semibold text-gray-100 mb-4">Yeni Kaynak Ekle</h2>
         <form onSubmit={addSource} className="flex gap-3 items-end">
           <div className="flex-1">
-            <label className="block text-xs font-medium text-gray-500 mb-1">Site Adı</label>
+            <label className="block text-xs font-medium text-gray-400 mb-1">Site Adı</label>
             <input value={name} onChange={e => setName(e.target.value)} required
               placeholder="Örn: Yozgat Çamlık"
-              className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+              className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
           <div className="flex-[2]">
-            <label className="block text-xs font-medium text-gray-500 mb-1">RSS URL</label>
+            <label className="block text-xs font-medium text-gray-400 mb-1">RSS URL</label>
             <input value={url} onChange={e => setUrl(e.target.value)} required
               placeholder="https://www.yozgatcamlik.com/rss/"
-              className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+              className="w-full border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
           <button type="submit" className="bg-blue-600 text-white rounded-lg px-6 py-2 text-sm font-medium hover:bg-blue-700 transition whitespace-nowrap">
             Ekle
@@ -142,14 +142,14 @@ export default function RssSourcesPage() {
         </button>
       </div>
 
-      <div className="bg-white border border-gray-100 rounded-xl overflow-hidden">
+      <div className="bg-[#0f0f16] border border-white/5 rounded-xl overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
-              <th className="text-left px-4 py-3 font-medium text-gray-500">#</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Site Adı</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">RSS URL</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">İşlem</th>
+            <tr className="bg-[#050508] border-b border-white/5">
+              <th className="text-left px-4 py-3 font-medium text-gray-400">#</th>
+              <th className="text-left px-4 py-3 font-medium text-gray-400">Site Adı</th>
+              <th className="text-left px-4 py-3 font-medium text-gray-400">RSS URL</th>
+              <th className="text-right px-4 py-3 font-medium text-gray-400">İşlem</th>
             </tr>
           </thead>
           <tbody>
@@ -158,28 +158,28 @@ export default function RssSourcesPage() {
             ) : sources.length === 0 ? (
               <tr><td colSpan={4} className="text-center py-8 text-gray-400">Henüz kaynak eklenmemiş.</td></tr>
             ) : sources.map((s, i) => (
-              <tr key={i} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
+              <tr key={i} className="border-b border-gray-50 hover:bg-[#050508]/50 transition">
                 {editIdx === i ? (
                   <>
                     <td className="px-4 py-3 text-gray-400">{i + 1}</td>
                     <td className="px-4 py-3">
                       <input value={editName} onChange={e => setEditName(e.target.value)}
-                        className="w-full border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                        className="w-full border border-white/10 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
                     </td>
                     <td className="px-4 py-3">
                       <input value={editUrl} onChange={e => setEditUrl(e.target.value)}
-                        className="w-full border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                        className="w-full border border-white/10 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
                     </td>
                     <td className="px-4 py-3 text-right">
                       <button onClick={saveEdit} className="text-green-600 hover:text-green-700 text-xs font-medium mr-3">Kaydet</button>
-                      <button onClick={cancelEdit} className="text-gray-400 hover:text-gray-600 text-xs">İptal</button>
+                      <button onClick={cancelEdit} className="text-gray-400 hover:text-gray-400 text-xs">İptal</button>
                     </td>
                   </>
                 ) : (
                   <>
                     <td className="px-4 py-3 text-gray-400">{i + 1}</td>
-                    <td className="px-4 py-3 font-medium text-gray-800">{s.name}</td>
-                    <td className="px-4 py-3 text-gray-500 font-mono text-xs truncate max-w-[400px]">{s.url}</td>
+                    <td className="px-4 py-3 font-medium text-gray-100">{s.name}</td>
+                    <td className="px-4 py-3 text-gray-400 font-mono text-xs truncate max-w-[400px]">{s.url}</td>
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       <button onClick={() => startEdit(i)} className="text-blue-600 hover:text-blue-700 text-xs font-medium mr-3">Düzenle</button>
                       <button onClick={() => deleteSource(i)} className="text-red-500 hover:text-red-600 text-xs font-medium">Sil</button>

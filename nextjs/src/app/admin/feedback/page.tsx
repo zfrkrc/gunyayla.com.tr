@@ -29,30 +29,30 @@ export default function FeedbackPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-2">👍 Beğeni İstatistikleri</h1>
-      <p className="text-sm text-gray-500 mb-6">Toplam {data?.total || 0} beğeni</p>
+      <p className="text-sm text-gray-400 mb-6">Toplam {data?.total || 0} beğeni</p>
 
-      <div className="bg-white border border-gray-100 rounded-xl overflow-hidden">
+      <div className="bg-[#0f0f16] border border-white/5 rounded-xl overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Haber</th>
-              <th className="text-center px-4 py-3 font-medium text-gray-500">👍</th>
-              <th className="text-center px-4 py-3 font-medium text-gray-500">👎</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Tarih</th>
+            <tr className="bg-[#050508] border-b border-white/5">
+              <th className="text-left px-4 py-3 font-medium text-gray-400">Haber</th>
+              <th className="text-center px-4 py-3 font-medium text-gray-400">👍</th>
+              <th className="text-center px-4 py-3 font-medium text-gray-400">👎</th>
+              <th className="text-right px-4 py-3 font-medium text-gray-400">Tarih</th>
             </tr>
           </thead>
           <tbody>
             {data?.posts.length === 0 ? (
               <tr><td colSpan={4} className="text-center py-8 text-gray-400">Henüz beğeni yok</td></tr>
             ) : data?.posts.map(p => (
-              <tr key={p.id} className="border-b border-gray-50 hover:bg-gray-50/50">
+              <tr key={p.id} className="border-b border-gray-50 hover:bg-[#050508]/50">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     {p.image && (
                       <img src={p.image} alt="" className="w-10 h-10 rounded-lg object-cover" />
                     )}
                     <div>
-                      <p className="font-medium text-gray-800">{p.title}</p>
+                      <p className="font-medium text-gray-100">{p.title}</p>
                       <p className="text-xs text-gray-400">/{p.slug}</p>
                     </div>
                   </div>

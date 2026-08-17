@@ -24,7 +24,7 @@ export default async function GalleryPage() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-2">Galeri</h1>
-      <p className="text-gray-500 mb-8">Fotoğraf albümleri</p>
+      <p className="text-gray-400 mb-8">Fotoğraf albümleri</p>
 
       {allAlbums.length === 0 ? (
         <p className="text-gray-400 text-center py-16">Henüz albüm yok.</p>
@@ -34,10 +34,10 @@ export default async function GalleryPage() {
             <Link
               key={album.id}
               href={`/galeri/${album.slug}`}
-              className="group rounded-xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-md transition"
+              className="group rounded-xl overflow-hidden shadow-sm border border-white/10 hover:shadow-md transition"
             >
               {/* Kapak fotoğrafı */}
-              <div className="relative h-52 bg-gray-100">
+              <div className="relative h-52 bg-[#0f0f16]">
                 {album.coverImage ? (
                   <Image
                     src={album.coverImage}
@@ -51,10 +51,10 @@ export default async function GalleryPage() {
               </div>
 
               {/* Bilgi */}
-              <div className="p-4 bg-white">
-                <h2 className="font-semibold text-gray-800 mb-1 line-clamp-1">{album.title}</h2>
+              <div className="p-4 bg-[#0f0f16]">
+                <h2 className="font-semibold text-gray-100 mb-1 line-clamp-1">{album.title}</h2>
                 {album.description && (
-                  <p className="text-sm text-gray-500 line-clamp-2 mb-2">{album.description}</p>
+                  <p className="text-sm text-gray-400 line-clamp-2 mb-2">{album.description}</p>
                 )}
                 <span className="text-xs text-gray-400">
                   {countMap[album.id] ?? 0} fotoğraf

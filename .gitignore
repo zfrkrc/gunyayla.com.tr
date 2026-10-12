@@ -11,3 +11,6 @@ github_public_key.txt
 .opencode/
 tools/db/node_modules/
 *.tsbuildinfo
+.repowise/
+.claude/CLAUDE.md
+.vscode/

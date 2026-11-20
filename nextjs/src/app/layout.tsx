@@ -86,6 +86,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </div>
             <div className="border-t border-white/5 pt-6 text-center text-xs text-gray-400">
               © {new Date().getFullYear()} {siteTitle} — Tüm hakları saklıdır.
+              <span className="zk-design-credit" style={{ display: "inline-block", marginLeft: 8, opacity: 0.75 }}>Tasarım:{" "}<a href="https://zaferkaraca.net" target="_blank" rel="noopener" style={{ color: "inherit", textDecoration: "none", fontWeight: 600 }}>ZK</a></span>
             </div>
           </div>
         </footer>
